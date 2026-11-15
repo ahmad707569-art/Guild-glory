@@ -432,7 +432,7 @@ async def major_register(release_v, access_token, open_id, name, game_version,
     try:
         ssl_ctx = ssl.create_default_context()
         ssl_ctx.check_hostname = False; ssl_ctx.verify_mode = ssl.CERT_NONE
-        proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY")
+                proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY")
                 async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=30)) as s:
             async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx) as resp:
                 content = await resp.read()
@@ -1278,7 +1278,7 @@ async def get_login_data(payload, jwt_token, server_url, release_version):
     try:
         ssl_ctx = ssl.create_default_context()
         ssl_ctx.check_hostname = False; ssl_ctx.verify_mode = ssl.CERT_NONE
-        proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY")
+                proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY")
                 async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=10)) as s:
             async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx, proxy=proxy) as r:
                 if r.status != 200: return None
@@ -1309,7 +1309,7 @@ async def get_player_personal_show(target_uid, jwt_token, server_url, release_ve
     try:
         ssl_ctx = ssl.create_default_context()
         ssl_ctx.check_hostname = False; ssl_ctx.verify_mode = ssl.CERT_NONE
-        proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY")
+                proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY")
                 async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=8)) as s:
             async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx, proxy=proxy) as r:
                 if r.status != 200: return None
