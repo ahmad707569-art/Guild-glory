@@ -1,0 +1,14 @@
+[
+  {
+    "uid": "8335380874",
+    "password": "AGS_COMMUNITY",
+    "region": "PK",
+    "clan_id": "3106403897"
+  },
+  {
+    "uid": "8335381579",
+    "password": "AGS_COMMUNITY",
+    "region": "PK",
+    "clan_id": "3106403897"
+  }
+]
