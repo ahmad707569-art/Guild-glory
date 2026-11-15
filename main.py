@@ -432,7 +432,8 @@ async def major_register(release_v, access_token, open_id, name, game_version,
     try:
         ssl_ctx = ssl.create_default_context()
         ssl_ctx.check_hostname = False; ssl_ctx.verify_mode = ssl.CERT_NONE
-        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=30)) as s:
+        proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY")
+                async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=30)) as s:
             async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx) as resp:
                 content = await resp.read()
                 print_info(f"[MAJOR-REG] status={resp.status} len={len(content)}")
@@ -1277,8 +1278,9 @@ async def get_login_data(payload, jwt_token, server_url, release_version):
     try:
         ssl_ctx = ssl.create_default_context()
         ssl_ctx.check_hostname = False; ssl_ctx.verify_mode = ssl.CERT_NONE
-        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=10)) as s:
-            async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx) as r:
+        proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY")
+                async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=10)) as s:
+            async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx, proxy=proxy) as r:
                 if r.status != 200: return None
                 content = await r.read()
                 for off in [0,64,48,32,80,16,128,8,96]:
@@ -1307,8 +1309,9 @@ async def get_player_personal_show(target_uid, jwt_token, server_url, release_ve
     try:
         ssl_ctx = ssl.create_default_context()
         ssl_ctx.check_hostname = False; ssl_ctx.verify_mode = ssl.CERT_NONE
-        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=8)) as s:
-            async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx) as r:
+        proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY")
+                async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=8)) as s:
+            async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx, proxy=proxy) as r:
                 if r.status != 200: return None
                 return decode_protobuf_2(await r.read())
     except Exception: return None
@@ -1382,7 +1385,7 @@ async def join_clan(jwt_token, clan_id):
         ssl_ctx = ssl.create_default_context()
         ssl_ctx.check_hostname = False; ssl_ctx.verify_mode = ssl.CERT_NONE
         async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=15)) as s:
-            async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx) as r:
+            async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx, proxy=proxy) as r:
                 # Read the response body so HTTP errors can be diagnosed instead
                 # of logging only the status code. Do not log auth tokens/headers.
                 response_text = await r.text(errors="replace")
@@ -2112,8 +2115,9 @@ async def functional_lone_wolf(addrs, starter_packet, account_region, client_ver
                 }
                 ssl_ctx = ssl.create_default_context()
                 ssl_ctx.check_hostname = False; ssl_ctx.verify_mode = ssl.CERT_NONE
+                proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY")
                 async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=8)) as s:
-                    async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx) as r:
+                    async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx, proxy=proxy) as r:
                         body = await r.read()
                         if r.status == 200 and len(body) > 0:
                             print_success(f"[FRIEND-{tag}] ✅ Accepted {target_uid}")
