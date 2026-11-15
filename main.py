@@ -432,8 +432,8 @@ async def major_register(release_v, access_token, open_id, name, game_version,
     try:
         ssl_ctx = ssl.create_default_context()
         ssl_ctx.check_hostname = False; ssl_ctx.verify_mode = ssl.CERT_NONE
-                proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY")
                 async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=30)) as s:
+            proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY")
             async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx) as resp:
                 content = await resp.read()
                 print_info(f"[MAJOR-REG] status={resp.status} len={len(content)}")
