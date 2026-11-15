@@ -432,7 +432,7 @@ async def major_register(release_v, access_token, open_id, name, game_version,
     try:
         ssl_ctx = ssl.create_default_context()
         ssl_ctx.check_hostname = False; ssl_ctx.verify_mode = ssl.CERT_NONE
-        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=30)) as s:
+        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=30), trust_env=True) as s:
             async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx) as resp:
                 content = await resp.read()
                 print_info(f"[MAJOR-REG] status={resp.status} len={len(content)}")
@@ -1140,7 +1140,7 @@ async def register_account(password, gop_url, app_version):
         "Accept": "application/json",
         "Content-Type": "application/json; charset=utf-8"}
     try:
-        async with aiohttp.ClientSession(connector=connector) as s:
+        async with aiohttp.ClientSession(connector=connector, trust_env=True) as s:
             async with s.post(f"{gop_url}/api/v2/oauth/guest:register",
                               headers=headers, data=payload,
                               timeout=aiohttp.ClientTimeout(total=15)) as resp:
@@ -1163,7 +1163,7 @@ async def grant_token(uid, password, gop_url, app_version):
         "Accept": "application/json",
         "Content-Type": "application/json; charset=utf-8"}
     try:
-        async with aiohttp.ClientSession(connector=connector) as s:
+        async with aiohttp.ClientSession(connector=connector, trust_env=True) as s:
             async with s.post(f"{gop_url}/api/v2/oauth/guest/token:grant",
                               headers=headers, data=payload,
                               timeout=aiohttp.ClientTimeout(total=15)) as resp:
@@ -1232,7 +1232,7 @@ async def major_login(payload, login_url, release_version):
         ssl_context = ssl.create_default_context()
         ssl_context.check_hostname = False
         ssl_context.verify_mode = ssl.CERT_NONE
-        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=15)) as session:
+        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=15), trust_env=True) as session:
             async with session.post(url, headers=req_headers, data=payload, ssl=ssl_context) as response:
                 response_content = await response.read()
                 if response.status != 200 or len(response_content) < 200:
@@ -1277,7 +1277,7 @@ async def get_login_data(payload, jwt_token, server_url, release_version):
     try:
         ssl_ctx = ssl.create_default_context()
         ssl_ctx.check_hostname = False; ssl_ctx.verify_mode = ssl.CERT_NONE
-        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=10)) as s:
+        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=10), trust_env=True) as s:
             async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx) as r:
                 if r.status != 200: return None
                 content = await r.read()
@@ -1307,7 +1307,7 @@ async def get_player_personal_show(target_uid, jwt_token, server_url, release_ve
     try:
         ssl_ctx = ssl.create_default_context()
         ssl_ctx.check_hostname = False; ssl_ctx.verify_mode = ssl.CERT_NONE
-        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=8)) as s:
+        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=8), trust_env=True) as s:
             async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx) as r:
                 if r.status != 200: return None
                 return decode_protobuf_2(await r.read())
@@ -1381,7 +1381,7 @@ async def join_clan(jwt_token, clan_id):
             "Connection":"Keep-Alive","Accept-Encoding":"gzip"}
         ssl_ctx = ssl.create_default_context()
         ssl_ctx.check_hostname = False; ssl_ctx.verify_mode = ssl.CERT_NONE
-        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=15)) as s:
+        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=15), trust_env=True) as s:
             async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx) as r:
                 # Read the response body so HTTP errors can be diagnosed instead
                 # of logging only the status code. Do not log auth tokens/headers.
@@ -2112,7 +2112,7 @@ async def functional_lone_wolf(addrs, starter_packet, account_region, client_ver
                 }
                 ssl_ctx = ssl.create_default_context()
                 ssl_ctx.check_hostname = False; ssl_ctx.verify_mode = ssl.CERT_NONE
-                async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=8)) as s:
+                async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=8), trust_env=True) as s:
                     async with s.post(url, headers=hdrs, data=payload, ssl=ssl_ctx) as r:
                         body = await r.read()
                         if r.status == 200 and len(body) > 0:
@@ -2839,7 +2839,7 @@ async def choose_region(region, jwt_token, login_url, release_version):
     try:
         ssl_ctx = ssl.create_default_context()
         ssl_ctx.check_hostname = False; ssl_ctx.verify_mode = ssl.CERT_NONE
-        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=15)) as s:
+        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=15), trust_env=True) as s:
             async with s.post(url, data=payload, headers=hdrs, ssl=ssl_ctx) as r:
                 await r.read()
                 return r.status
